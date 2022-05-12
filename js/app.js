@@ -158,21 +158,24 @@ window.addEventListener('scroll', triggerActiveClass);
 
 // Build menu
 
-// Smooth scroll to anchor ID
+// Select all links
+const anchors = document.querySelectorAll('.navbar__menu a');
+
+// Iterate over selected element
+for (const anchor of anchors) {
+  anchor.addEventListener('click', smoothScroll);
+}
+
 // Scroll to section on link click
-$('.navbar__menu a').on('click', function (e) {
+function smoothScroll(e) {
   // Prevent refresh after selection
-  if (this.hash !== '') {
-    e.preventDefault();
+  e.preventDefault();
+  const href = this.getAttribute('href');
+  const offsetTop = document.querySelector(href).offsetTop;
 
-    const hash = this.hash;
-
-    // Smooth scroll animation
-    $('html, body').animate(
-      {
-        scrollTop: $(hash).offset().top
-      },
-      800
-    );
-  }
-});
+  // Smooth scroll animation
+  scroll({
+    top: offsetTop,
+    behavior: 'smooth'
+  });
+}
