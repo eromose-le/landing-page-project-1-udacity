@@ -72,6 +72,7 @@ create4thSection();
  * Define Global Variables
  *
  */
+
 const navBox = document.getElementById('navbar__list');
 const allSections = document.querySelectorAll('section');
 
@@ -81,6 +82,24 @@ const allSections = document.querySelectorAll('section');
  *
  */
 
+// Add class='your-active-class'
+const addClass = (condition, element) => {
+  if (condition) {
+    element.classList.add('your-active-class');
+    element.style.bgColor =
+      'background: linear-gradient( 0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);';
+  }
+};
+
+// Remove class='your-active-class'
+const removeClass = (element) => {
+  element.classList.remove('your-active-class');
+  element.style.bgColor = 'background: #000000);';
+};
+
+// Get position and round up to nearest whole number
+const axis = (element) => Math.floor(element.getBoundingClientRect().top);
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -89,20 +108,21 @@ const allSections = document.querySelectorAll('section');
 
 // build the nav
 
+// Append li elements with class name to all section elements to
 const nav = () => {
   let navigation = '';
 
-  // iterate over allSections <section>
+  // Iterate over allSections <section>
   for (section of allSections) {
-    // define element attributes
+    // Define element attributes
     const id = section.id;
     const dataAttr = section.dataset.nav;
 
-    // assign attributes to <li> element
+    // Assign attributes to <li> element
     navigation += `<li><a class="menu__link" href="#${id}">${dataAttr}</a></li>`;
   }
 
-  // append all <li> to navigation box <ul>
+  // Append all <li> to navigation box <ul>
   navBox.innerHTML = navigation;
 };
 
@@ -110,7 +130,45 @@ nav();
 
 // Add class 'active' to section when near top of viewport
 
+// Func to apply active class when mouse is around 120 viewport of each section
+const triggerActiveClass = () => {
+  // Iterate over allSections <section>
+  for (section of allSections) {
+    const elementAxis = axis(section);
+
+    // Set viewport range
+    inviewport = () => elementAxis < 120 && elementAxis >= -120;
+
+    removeClass(section);
+    addClass(inviewport(), section);
+  }
+};
+
+window.addEventListener('scroll', triggerActiveClass);
+
 // Scroll to anchor ID using scrollTO event
+
+const scrollToId = () => {
+  // Select all <a> in the <li>
+  const anchors = document.querySelectorAll('.navbar__menu a');
+  anchors.forEach((anchor) => {
+    // Iterate over all <a>
+    anchor.addEventListener('click', () => {
+      // Apply eventListener on each node
+      for (i = 0; i < allSections; i++) {
+        allSections[i].addEventListener(
+          'click',
+          (e) => {
+            scrollTo(anchor, e);
+          },
+          false
+        );
+      }
+    });
+  });
+};
+
+scrollToId();
 
 /**
  * End Main Functions

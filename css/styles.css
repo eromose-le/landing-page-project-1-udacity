@@ -9,6 +9,11 @@
 */
 
 /* ---- Base Rules ---- */
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: rgb(136, 203, 171);
   background: linear-gradient(
@@ -75,7 +80,7 @@ section {
   display: inline-block;
 }
 
-@media (max-width: 420px) {
+@media only screen and (max-width: 420px) {
   .navbar__menu li {
     font-size: 12px;
   }
