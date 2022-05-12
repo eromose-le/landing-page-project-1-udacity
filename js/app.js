@@ -86,19 +86,21 @@ const allSections = document.querySelectorAll('section');
 const addClass = (condition, element) => {
   if (condition) {
     element.classList.add('your-active-class');
-    element.style.bgColor =
-      'background: linear-gradient( 0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);';
+    element.style.cssText = 'background-color: rgba(0, 0, 255, 0.527);';
   }
 };
 
 // Remove class='your-active-class'
 const removeClass = (element) => {
   element.classList.remove('your-active-class');
-  element.style.bgColor = 'background: #000000);';
+  element.style.cssText =
+    'background: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);';
 };
 
 // Get position and round up to nearest whole number
-const axis = (element) => Math.floor(element.getBoundingClientRect().top);
+const axis = (element) => {
+  return Math.floor(element.getBoundingClientRect().top);
+};
 
 /**
  * End Helper Functions
@@ -137,38 +139,16 @@ const triggerActiveClass = () => {
     const elementAxis = axis(section);
 
     // Set viewport range
-    inviewport = () => elementAxis < 120 && elementAxis >= -120;
+    inviewport = () => elementAxis < 130 && elementAxis >= -130;
 
     removeClass(section);
+
+    // Set sections as active
     addClass(inviewport(), section);
   }
 };
 
 window.addEventListener('scroll', triggerActiveClass);
-
-// Scroll to anchor ID using scrollTO event
-
-const scrollToId = () => {
-  // Select all <a> in the <li>
-  const anchors = document.querySelectorAll('.navbar__menu a');
-  anchors.forEach((anchor) => {
-    // Iterate over all <a>
-    anchor.addEventListener('click', () => {
-      // Apply eventListener on each node
-      for (i = 0; i < allSections; i++) {
-        allSections[i].addEventListener(
-          'click',
-          (e) => {
-            scrollTo(anchor, e);
-          },
-          false
-        );
-      }
-    });
-  });
-};
-
-scrollToId();
 
 /**
  * End Main Functions
@@ -178,6 +158,21 @@ scrollToId();
 
 // Build menu
 
+// Smooth scroll to anchor ID
 // Scroll to section on link click
+$('.navbar__menu a').on('click', function (e) {
+  // Prevent refresh after selection
+  if (this.hash !== '') {
+    e.preventDefault();
 
-// Set sections as active
+    const hash = this.hash;
+
+    // Smooth scroll animation
+    $('html, body').animate(
+      {
+        scrollTop: $(hash).offset().top
+      },
+      800
+    );
+  }
+});
