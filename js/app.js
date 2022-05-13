@@ -123,19 +123,16 @@ const anchors = $('.navbar__menu a');
 // Iterate over selected element
 for (anchor of anchors) {
   // Listen for click event on anchor
-  console.log(anchor);
-  $(anchor).on('click', smoothScroll);
-}
+  $(anchor).on('click', function smoothScroll(e) {
+    // Prevent refresh after selection
+    e.preventDefault();
+    const href = this.getAttribute('href');
 
-// Scroll to section on link click
-function smoothScroll(e) {
-  // Prevent refresh after selection
-  e.preventDefault();
-  const href = this.getAttribute('href');
-
-  // Smooth scroll animation
-  scroll({
-    top: document.querySelector(href).offsetTop,
-    behavior: 'smooth'
+    // Smooth scroll animation
+    if (href)
+      return scroll({
+        top: document.querySelector(href).offsetTop,
+        behavior: 'smooth'
+      });
   });
 }
