@@ -1,28 +1,8 @@
 /**
- *
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- *
- * Dependencies: None
- *
- * JS Version: ES2015/ES6
- *
- * JS Standard: ESlint
- *
- */
+ Udacity landing page project
+**/
 
-/**
- * Comments should be present at the beginning of each procedure and class.
- * Great to have comments before crucial code sections within the procedure.
- */
-
-/**
- * Start Create fourth (4th) section element
- *
- */
-
+// Create fourth (4th) section element
 const create4thSection = () => {
   // Create <h2> element and populate with text
   const h2 = document.createElement('h2');
@@ -61,109 +41,90 @@ const create4thSection = () => {
   main.appendChild(section);
 };
 
+// Call function to create 4th section element
 create4thSection();
 
-/**
- * End Create fourth (4th) section element
- *
- */
-
-/**
- * Define Global Variables
- *
- */
-
-const navBox = document.getElementById('navbar__list');
-const allSections = document.querySelectorAll('section');
-
-/**
- * End Global Variables
- * Start Helper Functions
- *
- */
-
-// Add class='your-active-class'
+// Add active class
 const addClass = (condition, element) => {
+  // Add class if condition is true
   if (condition) {
-    element.classList.add('your-active-class');
-    element.style.cssText = 'background-color: rgba(0, 0, 255, 0.527);';
+    $(element).addClass('your-active-class');
+    $(element).css('background', 'rgba(0, 11, 24, 0.781)');
+  } else {
+    // Remove class if condition is false
+    removeClass(element);
   }
 };
 
-// Remove class='your-active-class'
+// Remove active class
 const removeClass = (element) => {
-  element.classList.remove('your-active-class');
-  element.style.cssText =
-    'background: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);';
+  $(element).removeClass('your-active-class');
+
+  $(element).css(
+    'background',
+    'linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%)'
+  );
 };
 
-// Get position and round up to nearest whole number
-const axis = (element) => {
-  return Math.floor(element.getBoundingClientRect().top);
-};
+// Declarations
 
-/**
- * End Helper Functions
- * Begin Main Functions
- *
- */
+// Get ul element by Id
+const unorderedList = $('#navbar__list')[0];
 
-// build the nav
+// Get all section elements
+const allSections = $('section');
 
-// Append li elements with class name to all section elements to
-const nav = () => {
-  let navigation = '';
-
-  // Iterate over allSections <section>
+// Create list items and append to ul element
+const createDynamicNavigation = () => {
+  // Initialize list variable
+  let list = '';
+  // Iterate over allSections and assign unique is<section>
   for (section of allSections) {
-    // Define element attributes
-    const id = section.id;
-    const dataAttr = section.dataset.nav;
-
-    // Assign attributes to <li> element
-    navigation += `<li><a class="menu__link" href="#${id}">${dataAttr}</a></li>`;
+    // Append li and a element to list variable
+    list +=
+      '<li><a class="menu__link" href="#' +
+      section.id +
+      '">' +
+      section.dataset.nav +
+      '</a></li>';
   }
 
-  // Append all <li> to navigation box <ul>
-  navBox.innerHTML = navigation;
+  // Append list <li> to unorderedList <ul>
+  $(unorderedList).append(list);
 };
 
-nav();
-
-// Add class 'active' to section when near top of viewport
-
-// Func to apply active class when mouse is around 120 viewport of each section
+// Apply active class when mouse is around 120 viewport of each section
 const triggerActiveClass = () => {
-  // Iterate over allSections <section>
+  // Iterate over section
   for (section of allSections) {
-    const elementAxis = axis(section);
-
     // Set viewport range
-    inviewport = () => elementAxis < 130 && elementAxis >= -130;
+    isInRange = (element) =>
+      Math.floor(element.getBoundingClientRect().top) < 130 &&
+      Math.floor(element.getBoundingClientRect().top) >= -130;
 
-    removeClass(section);
-
-    // Set sections as active
-    addClass(inviewport(), section);
+    // Set sections as active if condition is true
+    addClass(isInRange(section), section);
   }
 };
 
-window.addEventListener('scroll', triggerActiveClass);
+// Call function to create navigation
+createDynamicNavigation();
 
-/**
- * End Main Functions
- * Begin Events
- *
- */
+/*
+  Listen on window and when on scroll, 
+  trigger function to set active class on section element
+*/
 
-// Build menu
+$(window).on('scroll', () => triggerActiveClass());
 
 // Select all links
-const anchors = document.querySelectorAll('.navbar__menu a');
+const anchors = $('.navbar__menu a');
 
 // Iterate over selected element
-for (const anchor of anchors) {
-  anchor.addEventListener('click', smoothScroll);
+for (anchor of anchors) {
+  // Listen for click event on anchor
+  console.log(anchor);
+  $(anchor).on('click', smoothScroll);
 }
 
 // Scroll to section on link click
@@ -171,11 +132,10 @@ function smoothScroll(e) {
   // Prevent refresh after selection
   e.preventDefault();
   const href = this.getAttribute('href');
-  const offsetTop = document.querySelector(href).offsetTop;
 
   // Smooth scroll animation
   scroll({
-    top: offsetTop,
+    top: document.querySelector(href).offsetTop,
     behavior: 'smooth'
   });
 }
