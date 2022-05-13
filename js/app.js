@@ -2,7 +2,18 @@
  Udacity landing page project
 **/
 
-// Create fourth (4th) section element
+/**
+ * @description Create fourth (4th) section element
+ * @param {string} div
+ * @param {string} h2
+ * @param {string} p1
+ * @param {string} p2
+ * @param {string} text
+ * @param {string} text1
+ * @param {string} text2
+ * @returns {string} <section><h2><p><p></p></p></h2></section>>
+ */
+
 const create4thSection = () => {
   // Create <h2> element and populate with text
   const h2 = document.createElement('h2');
